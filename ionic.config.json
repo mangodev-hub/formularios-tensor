@@ -1,0 +1,7 @@
+{
+  "name": "formularios-empresarial",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
