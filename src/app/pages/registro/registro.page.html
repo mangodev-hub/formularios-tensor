@@ -1,0 +1,447 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Registrar candidato</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirmarLimpiar()" [disabled]="guardando()" aria-label="Limpiar formulario">
+        <ion-icon slot="icon-only" name="refresh-outline" aria-hidden="true" />
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-progress-bar
+    color="secondary"
+    [value]="progreso()"
+    [attr.aria-label]="seccionesCompletas() + ' de ' + secciones.length + ' secciones completas'"
+  />
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <section class="intro">
+    <!-- Flo, el búho reclutador (Rive). El ícono es el respaldo si la animación no carga. -->
+    <app-rive #flo artboard="Flo" class="intro-ilustracion">
+      <ion-icon name="briefcase-outline" aria-hidden="true" />
+    </app-rive>
+    <div class="intro-texto">
+      <h1>Nuevo talento</h1>
+      <p>Completa los {{ secciones.length }} bloques. Los campos con * son obligatorios.</p>
+      <span class="intro-progreso">{{ seccionesCompletas() }} de {{ secciones.length }} secciones completas</span>
+    </div>
+  </section>
+
+  <form [formGroup]="form" novalidate [class.bloqueado]="guardando()" [attr.aria-busy]="guardando()">
+    <!-- 1 · Datos personales ------------------------------------------------ -->
+    <ion-card>
+      <ion-card-header>
+        <div class="encabezado">
+          <ion-icon class="encabezado-icono" name="person-outline" aria-hidden="true" />
+          <div class="encabezado-texto">
+            <ion-card-subtitle>Paso 1 de 5</ion-card-subtitle>
+            <ion-card-title>Datos personales</ion-card-title>
+          </div>
+          <ion-icon
+            class="encabezado-estado"
+            [name]="seccionCompleta().personales ? 'checkmark-circle' : 'ellipse-outline'"
+            [color]="seccionCompleta().personales ? 'success' : 'medium'"
+            [attr.aria-label]="seccionCompleta().personales ? 'Sección completa' : 'Sección incompleta'"
+          />
+        </div>
+      </ion-card-header>
+
+      <ion-card-content class="campos">
+        <ion-input
+          id="campo-nombres"
+          formControlName="nombres"
+          label="Nombres y apellidos *"
+          labelPlacement="floating"
+          fill="outline"
+          placeholder="Ana Pérez"
+          autocomplete="name"
+          autocapitalize="words"
+          enterkeyhint="next"
+          [maxlength]="80"
+          helperText="Como aparecen en tu documento de identidad."
+          [errorText]="error('nombres')"
+        />
+
+        <ion-input
+          id="campo-correo"
+          formControlName="correo"
+          type="email"
+          inputmode="email"
+          label="Correo electrónico *"
+          labelPlacement="floating"
+          fill="outline"
+          placeholder="ana.ejemplo@correo.test"
+          autocomplete="email"
+          autocapitalize="off"
+          enterkeyhint="next"
+          [errorText]="error('correo')"
+        />
+
+        <ion-input
+          id="campo-telefono"
+          formControlName="telefono"
+          type="tel"
+          inputmode="tel"
+          label="Teléfono *"
+          labelPlacement="floating"
+          fill="outline"
+          placeholder="0990000000"
+          autocomplete="tel"
+          enterkeyhint="next"
+          [maxlength]="20"
+          helperText="Entre 7 y 15 dígitos."
+          [errorText]="error('telefono')"
+        />
+
+        <div id="campo-fechaNacimiento" class="campo-fecha">
+          <ion-item
+            id="abrir-fechaNacimiento"
+            button
+            [detail]="false"
+            lines="none"
+            class="selector-fecha"
+            [class.selector-fecha--error]="mostrarError('fechaNacimiento')"
+          >
+            <ion-icon slot="start" name="calendar-outline" aria-hidden="true" />
+            <ion-label>
+              <p>Fecha de nacimiento *</p>
+              <h3 [class.placeholder]="!form.controls.fechaNacimiento.value">
+                {{ fechaLegible('fechaNacimiento') || 'Seleccionar fecha' }}
+              </h3>
+            </ion-label>
+          </ion-item>
+          @if (mostrarError('fechaNacimiento')) {
+          <ion-note color="danger" class="error-campo">{{ error('fechaNacimiento') }}</ion-note>
+          }
+        </div>
+        <ion-modal
+          trigger="abrir-fechaNacimiento"
+          class="tf-hoja-fecha"
+          [initialBreakpoint]="1"
+          [breakpoints]="[0, 1]"
+          [keepContentsMounted]="true"
+          (didDismiss)="marcarTocado('fechaNacimiento')"
+        >
+          <ng-template>
+            <div class="tf-hoja-contenido">
+              <ion-datetime
+                formControlName="fechaNacimiento"
+                presentation="date"
+                locale="es-EC"
+                [preferWheel]="true"
+                [min]="fechaMinNacimiento"
+                [max]="fechaMaxNacimiento"
+                [showDefaultButtons]="true"
+                cancelText="Cancelar"
+                doneText="Listo"
+              >
+                <span slot="title">Fecha de nacimiento</span>
+              </ion-datetime>
+            </div>
+          </ng-template>
+        </ion-modal>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- 2 · Perfil profesional ---------------------------------------------- -->
+    <ion-card>
+      <ion-card-header>
+        <div class="encabezado">
+          <ion-icon class="encabezado-icono" name="briefcase-outline" aria-hidden="true" />
+          <div class="encabezado-texto">
+            <ion-card-subtitle>Paso 2 de 5</ion-card-subtitle>
+            <ion-card-title>Perfil profesional</ion-card-title>
+          </div>
+          <ion-icon
+            class="encabezado-estado"
+            [name]="seccionCompleta().perfil ? 'checkmark-circle' : 'ellipse-outline'"
+            [color]="seccionCompleta().perfil ? 'success' : 'medium'"
+            [attr.aria-label]="seccionCompleta().perfil ? 'Sección completa' : 'Sección incompleta'"
+          />
+        </div>
+      </ion-card-header>
+
+      <ion-card-content class="campos">
+        <ion-select
+          id="campo-cargo"
+          formControlName="cargo"
+          label="Cargo al que postula *"
+          labelPlacement="floating"
+          fill="outline"
+          interface="action-sheet"
+          cancelText="Cancelar"
+          [interfaceOptions]="{ header: 'Cargo al que postula' }"
+          placeholder="Selecciona un cargo"
+          [errorText]="error('cargo')"
+        >
+          @for (cargo of cargos; track cargo) {
+          <ion-select-option [value]="cargo">{{ cargo }}</ion-select-option>
+          }
+        </ion-select>
+
+        <div id="campo-nivelAcademico" class="grupo">
+          <p class="grupo-etiqueta" id="etiqueta-nivel">Nivel académico *</p>
+          <ion-radio-group formControlName="nivelAcademico" aria-labelledby="etiqueta-nivel">
+            <ion-list lines="full" class="lista-opciones">
+              @for (nivel of niveles; track nivel) {
+              <ion-item>
+                <ion-radio [value]="nivel" justify="space-between">{{ nivel }}</ion-radio>
+              </ion-item>
+              }
+            </ion-list>
+          </ion-radio-group>
+          @if (mostrarError('nivelAcademico')) {
+          <ion-note color="danger" class="error-campo">Selecciona tu nivel académico.</ion-note>
+          }
+        </div>
+
+        <ion-input
+          id="campo-experienciaAnios"
+          formControlName="experienciaAnios"
+          type="number"
+          inputmode="numeric"
+          label="Años de experiencia *"
+          labelPlacement="floating"
+          fill="outline"
+          [min]="limites.experienciaMin"
+          [max]="limites.experienciaMax"
+          [step]="1"
+          helperText="Número entero entre 0 y 50."
+          [errorText]="error('experienciaAnios')"
+        />
+
+        <div id="campo-modalidad" class="grupo">
+          <p class="grupo-etiqueta" id="etiqueta-modalidad">Modalidad de trabajo *</p>
+          <ion-segment formControlName="modalidad" aria-labelledby="etiqueta-modalidad">
+            @for (m of modalidades; track m.valor) {
+            <ion-segment-button [value]="m.valor" layout="icon-top">
+              <ion-icon [name]="m.icono" aria-hidden="true" />
+              <ion-label>{{ m.valor }}</ion-label>
+            </ion-segment-button>
+            }
+          </ion-segment>
+          @if (mostrarError('modalidad')) {
+          <ion-note color="danger" class="error-campo">Selecciona una modalidad.</ion-note>
+          }
+        </div>
+
+        <div id="campo-habilidades" class="grupo">
+          <p class="grupo-etiqueta">
+            Habilidades técnicas *
+            <span class="grupo-contador">{{ form.controls.habilidades.value.length }} seleccionadas</span>
+          </p>
+          <ion-list lines="none" class="habilidades">
+            @for (habilidad of habilidades; track habilidad) {
+            <ion-item>
+              <ion-checkbox
+                labelPlacement="end"
+                justify="start"
+                [checked]="habilidadMarcada(habilidad)"
+                (ionChange)="alternarHabilidad(habilidad, $event.detail.checked)"
+                >{{ habilidad }}</ion-checkbox
+              >
+            </ion-item>
+            }
+          </ion-list>
+          @if (mostrarError('habilidades')) {
+          <ion-note color="danger" class="error-campo">{{ error('habilidades') }}</ion-note>
+          }
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- 3 · Disponibilidad -------------------------------------------------- -->
+    <ion-card>
+      <ion-card-header>
+        <div class="encabezado">
+          <ion-icon class="encabezado-icono" name="time-outline" aria-hidden="true" />
+          <div class="encabezado-texto">
+            <ion-card-subtitle>Paso 3 de 5</ion-card-subtitle>
+            <ion-card-title>Disponibilidad</ion-card-title>
+          </div>
+          <ion-icon
+            class="encabezado-estado"
+            [name]="seccionCompleta().disponibilidad ? 'checkmark-circle' : 'ellipse-outline'"
+            [color]="seccionCompleta().disponibilidad ? 'success' : 'medium'"
+            [attr.aria-label]="seccionCompleta().disponibilidad ? 'Sección completa' : 'Sección incompleta'"
+          />
+        </div>
+      </ion-card-header>
+
+      <ion-card-content class="campos">
+        <div id="campo-fechaDisponibilidad" class="campo-fecha">
+          <ion-item
+            id="abrir-fechaDisponibilidad"
+            button
+            [detail]="false"
+            lines="none"
+            class="selector-fecha"
+            [class.selector-fecha--error]="mostrarError('fechaDisponibilidad')"
+          >
+            <ion-icon slot="start" name="calendar-outline" aria-hidden="true" />
+            <ion-label>
+              <p>Disponible para iniciar desde *</p>
+              <h3 [class.placeholder]="!form.controls.fechaDisponibilidad.value">
+                {{ fechaLegible('fechaDisponibilidad') || 'Seleccionar fecha' }}
+              </h3>
+            </ion-label>
+          </ion-item>
+          @if (mostrarError('fechaDisponibilidad')) {
+          <ion-note color="danger" class="error-campo">{{ error('fechaDisponibilidad') }}</ion-note>
+          }
+        </div>
+        <ion-modal
+          trigger="abrir-fechaDisponibilidad"
+          class="tf-hoja-fecha"
+          [initialBreakpoint]="1"
+          [breakpoints]="[0, 1]"
+          [keepContentsMounted]="true"
+          (didDismiss)="marcarTocado('fechaDisponibilidad')"
+        >
+          <ng-template>
+            <div class="tf-hoja-contenido">
+              <ion-datetime
+                formControlName="fechaDisponibilidad"
+                presentation="date"
+                locale="es-EC"
+                [firstDayOfWeek]="1"
+                [min]="hoy"
+                [max]="fechaMaxDisponibilidad"
+                [showDefaultButtons]="true"
+                cancelText="Cancelar"
+                doneText="Listo"
+              >
+                <span slot="title">Fecha disponible para iniciar</span>
+              </ion-datetime>
+            </div>
+          </ng-template>
+        </ion-modal>
+
+        <ion-input
+          id="campo-aspiracionSalarial"
+          formControlName="aspiracionSalarial"
+          type="number"
+          inputmode="decimal"
+          label="Aspiración salarial mensual (USD) *"
+          labelPlacement="floating"
+          fill="outline"
+          placeholder="1200"
+          [min]="1"
+          [step]="50"
+          helperText="Valor mensual en dólares, mayor que 0."
+          [errorText]="error('aspiracionSalarial')"
+        >
+          <span slot="start" class="prefijo" aria-hidden="true">$</span>
+        </ion-input>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- 4 · Presentación ---------------------------------------------------- -->
+    <ion-card>
+      <ion-card-header>
+        <div class="encabezado">
+          <ion-icon class="encabezado-icono" name="document-text-outline" aria-hidden="true" />
+          <div class="encabezado-texto">
+            <ion-card-subtitle>Paso 4 de 5</ion-card-subtitle>
+            <ion-card-title>Presentación</ion-card-title>
+          </div>
+          <ion-icon
+            class="encabezado-estado"
+            [name]="seccionCompleta().presentacion ? 'checkmark-circle' : 'ellipse-outline'"
+            [color]="seccionCompleta().presentacion ? 'success' : 'medium'"
+            [attr.aria-label]="seccionCompleta().presentacion ? 'Sección completa' : 'Sección incompleta'"
+          />
+        </div>
+      </ion-card-header>
+
+      <ion-card-content class="campos">
+        <ion-textarea
+          id="campo-resumen"
+          formControlName="resumen"
+          label="Resumen profesional *"
+          labelPlacement="floating"
+          fill="outline"
+          placeholder="Cuéntanos tu experiencia, tus logros y qué buscas en tu próximo empleo."
+          [autoGrow]="true"
+          [rows]="4"
+          [counter]="true"
+          [maxlength]="limites.resumenMax"
+          helperText="Mínimo 30 caracteres."
+          [errorText]="error('resumen')"
+        />
+      </ion-card-content>
+    </ion-card>
+
+    <!-- 5 · Consentimiento -------------------------------------------------- -->
+    <ion-card>
+      <ion-card-header>
+        <div class="encabezado">
+          <ion-icon class="encabezado-icono" name="shield-checkmark-outline" aria-hidden="true" />
+          <div class="encabezado-texto">
+            <ion-card-subtitle>Paso 5 de 5</ion-card-subtitle>
+            <ion-card-title>Consentimiento</ion-card-title>
+          </div>
+          <ion-icon
+            class="encabezado-estado"
+            [name]="seccionCompleta().consentimiento ? 'checkmark-circle' : 'ellipse-outline'"
+            [color]="seccionCompleta().consentimiento ? 'success' : 'medium'"
+            [attr.aria-label]="seccionCompleta().consentimiento ? 'Sección completa' : 'Sección incompleta'"
+          />
+        </div>
+      </ion-card-header>
+
+      <ion-card-content class="campos">
+        <ion-checkbox
+          id="campo-consentimiento"
+          formControlName="consentimiento"
+          labelPlacement="end"
+          justify="start"
+          alignment="start"
+          [errorText]="error('consentimiento', 'Debes aceptar el tratamiento de datos para guardar.')"
+        >
+          Acepto el tratamiento de mis datos de prueba para este proceso de selección. *
+        </ion-checkbox>
+        <ion-note class="nota-privacidad">
+          Prototipo académico: registra solo datos ficticios. Este consentimiento no reemplaza una política de
+          privacidad real.
+        </ion-note>
+      </ion-card-content>
+    </ion-card>
+  </form>
+</ion-content>
+
+<ion-footer id="pie-registro">
+  <ion-toolbar>
+    <ion-button expand="block" class="boton-guardar" [disabled]="guardando()" (click)="enviar()">
+      @if (guardando()) {
+      <ion-spinner slot="start" name="crescent" aria-hidden="true" />
+      Guardando… } @else {
+      <ion-icon slot="start" name="save-outline" aria-hidden="true" />
+      Guardar candidato }
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
+
+<!-- Indicador de envío. Con ANIMACIONES_RIVE.envio: avión de papel → nube (Rive); si no, Ionic. -->
+@if (estadoEnvio() !== 'oculto') {
+<div class="envio-overlay" role="status" aria-live="polite">
+  <div class="envio-tarjeta">
+    @if (animarEnvio) {
+    <app-rive #envio artboard="Envio" class="envio-animacion">
+      <ion-spinner name="crescent" color="primary" aria-hidden="true" />
+    </app-rive>
+    } @else {
+    <div class="envio-icono" aria-hidden="true">
+      @switch (estadoEnvio()) { @case ('exito') {
+      <ion-icon name="checkmark-circle" color="success" />
+      } @case ('fallo') {
+      <ion-icon name="close-circle" color="danger" />
+      } @default {
+      <ion-spinner name="crescent" color="primary" />
+      } }
+    </div>
+    }
+    <p>{{ textoEnvio() }}</p>
+  </div>
+</div>
+}

@@ -1,0 +1,276 @@
+// ---------------------------------------------------------------------------
+// Introducción
+// ---------------------------------------------------------------------------
+
+.intro {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 16px 4px;
+}
+
+.intro-ilustracion {
+  flex: none;
+  width: 96px;
+  height: 96px;
+  border-radius: 26px;
+  background: rgba(var(--ion-color-primary-rgb), 0.12);
+  color: var(--ion-color-primary);
+  font-size: 40px;
+  overflow: hidden;
+}
+
+// ---------------------------------------------------------------------------
+// Overlay del envío (animación Rive "Envio")
+// ---------------------------------------------------------------------------
+
+.envio-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(var(--ion-background-color-rgb, 243, 246, 247), 0.72);
+  backdrop-filter: blur(3px);
+  animation: aparecer 0.2s ease-out;
+}
+
+.envio-tarjeta {
+  width: min(300px, 100%);
+  padding: 16px 16px 20px;
+  border-radius: 24px;
+  background: var(--ion-card-background, #fff);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  text-align: center;
+
+  p {
+    margin: 4px 0 0;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+}
+
+.envio-animacion {
+  width: 100%;
+  aspect-ratio: 240 / 160;
+}
+
+.envio-icono {
+  display: grid;
+  place-items: center;
+  height: 96px;
+
+  ion-spinner {
+    width: 56px;
+    height: 56px;
+  }
+
+  ion-icon {
+    font-size: 72px;
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .envio-overlay {
+    animation: none;
+  }
+}
+
+.intro-texto {
+  h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 4px 0 8px;
+    color: var(--ion-color-medium);
+    font-size: 0.9rem;
+    line-height: 1.35;
+  }
+}
+
+.intro-progreso {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(var(--ion-color-secondary-rgb), 0.16);
+  color: var(--ion-text-color);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+// ---------------------------------------------------------------------------
+// Tarjetas de sección
+// ---------------------------------------------------------------------------
+
+form {
+  padding-bottom: 16px;
+  transition: opacity 0.2s ease;
+}
+
+// Mientras se guarda: evita ediciones a medio envío.
+form.bloqueado {
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.encabezado {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.encabezado-icono {
+  flex: none;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(var(--ion-color-primary-rgb), 0.1);
+  color: var(--ion-color-primary);
+  font-size: 22px;
+}
+
+.encabezado-texto {
+  flex: 1;
+  min-width: 0;
+
+  ion-card-subtitle {
+    margin: 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+  }
+
+  ion-card-title {
+    font-size: 1.15rem;
+  }
+}
+
+.encabezado-estado {
+  flex: none;
+  font-size: 24px;
+}
+
+.campos {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+// ---------------------------------------------------------------------------
+// Grupos (radio, segment, checkboxes)
+// ---------------------------------------------------------------------------
+
+.grupo-etiqueta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 0 0 8px;
+  color: var(--ion-text-color);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.grupo-contador {
+  color: var(--ion-color-medium);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.lista-opciones,
+.habilidades {
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--ion-color-step-200, var(--ion-background-color-step-200, #ccc));
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+// Dos columnas de habilidades: menos desplazamiento en el teléfono.
+.habilidades {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 4px 0;
+}
+
+ion-segment-button {
+  min-height: 56px;
+  text-transform: none;
+}
+
+.error-campo {
+  display: block;
+  // Misma sangría que el helper/error nativo de los inputs "outline" de Ionic.
+  margin: 6px 16px 0;
+  font-size: 0.78rem;
+}
+
+// ---------------------------------------------------------------------------
+// Selector de fecha (abre una hoja inferior con ion-datetime)
+// ---------------------------------------------------------------------------
+
+.selector-fecha {
+  --background: transparent;
+  --min-height: 56px;
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
+  border: 1px solid var(--ion-color-step-300, var(--ion-background-color-step-300, #b3b3b3));
+  border-radius: 4px;
+
+  ion-icon {
+    margin-inline-end: 12px;
+    color: var(--ion-color-primary);
+  }
+
+  ion-label p {
+    margin: 0 0 2px;
+    font-size: 0.78rem;
+  }
+
+  ion-label h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .placeholder {
+    color: var(--ion-color-medium);
+  }
+}
+
+.selector-fecha--error {
+  border-color: var(--ion-color-danger);
+}
+
+// ---------------------------------------------------------------------------
+// Varios
+// ---------------------------------------------------------------------------
+
+.prefijo {
+  margin-inline-end: 4px;
+  color: var(--ion-color-medium);
+  font-weight: 600;
+}
+
+.nota-privacidad {
+  display: block;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.boton-guardar {
+  --border-radius: 12px;
+  min-height: 52px;
+  margin: 8px 16px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+}

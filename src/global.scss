@@ -10,20 +10,20 @@
  */
 
 /* Core CSS required for Ionic components to work properly */
-@import "@ionic/angular/css/core.css";
+@import '@ionic/angular/css/core.css';
 
 /* Basic CSS for apps built with Ionic */
-@import "@ionic/angular/css/normalize.css";
-@import "@ionic/angular/css/structure.css";
-@import "@ionic/angular/css/typography.css";
-@import "@ionic/angular/css/display.css";
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
+@import '@ionic/angular/css/display.css';
 
 /* Optional CSS utils that can be commented out */
-@import "@ionic/angular/css/padding.css";
-@import "@ionic/angular/css/float-elements.css";
-@import "@ionic/angular/css/text-alignment.css";
-@import "@ionic/angular/css/text-transformation.css";
-@import "@ionic/angular/css/flex-utils.css";
+@import '@ionic/angular/css/padding.css';
+@import '@ionic/angular/css/float-elements.css';
+@import '@ionic/angular/css/text-alignment.css';
+@import '@ionic/angular/css/text-transformation.css';
+@import '@ionic/angular/css/flex-utils.css';
 
 /**
  * Ionic Dark Mode
@@ -35,3 +35,50 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+/* ---------------------------------------------------------------------------
+ * TalentFlow — estilos globales
+ * ------------------------------------------------------------------------- */
+
+ion-card {
+  border-radius: var(--tf-radio);
+  box-shadow: var(--tf-sombra);
+}
+
+ion-card-title {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Los textos largos de checkbox/radio deben poder ocupar varias líneas en pantallas estrechas. */
+ion-checkbox::part(label),
+ion-radio::part(label) {
+  white-space: normal;
+}
+
+/* Hoja inferior de altura automática para los selectores de fecha (patrón "auto height sheet" de Ionic). */
+ion-modal.tf-hoja-fecha {
+  --height: auto;
+  --border-radius: 20px;
+}
+
+ion-modal.tf-hoja-fecha .ion-page {
+  position: relative;
+  display: block;
+  contain: content;
+}
+
+ion-modal.tf-hoja-fecha .tf-hoja-contenido {
+  display: flex;
+  justify-content: center;
+  max-height: 85vh;
+  overflow: auto;
+  padding: 8px 0 calc(16px + var(--ion-safe-area-bottom, 0px));
+}
+
+/* Respeta a quien prefiere menos movimiento. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+  }
+}

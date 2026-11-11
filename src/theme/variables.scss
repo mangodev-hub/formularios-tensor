@@ -1,2 +1,70 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+// Tema TalentFlow — https://ionicframework.com/docs/theming/
+// Paleta: azul petróleo (confianza, corporativo) + coral (calidez, acento humano).
+// Contrastes comprobados (WCAG AA): blanco sobre primary 7.7:1; negro sobre secondary 7.6:1.
+// Este archivo se carga DESPUÉS de global.scss, así que sobrescribe la paleta oscura por defecto de Ionic.
+
+:root {
+  --ion-font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Primary · azul petróleo */
+  --ion-color-primary: #0f5b66;
+  --ion-color-primary-rgb: 15, 91, 102;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #0d505a;
+  --ion-color-primary-tint: #276b75;
+
+  /* Secondary · coral */
+  --ion-color-secondary: #f07a5f;
+  --ion-color-secondary-rgb: 240, 122, 95;
+  --ion-color-secondary-contrast: #000000;
+  --ion-color-secondary-contrast-rgb: 0, 0, 0;
+  --ion-color-secondary-shade: #d36b54;
+  --ion-color-secondary-tint: #f2876f;
+
+  /* Tertiary · menta suave (estados positivos secundarios, chips) */
+  --ion-color-tertiary: #2a9d8f;
+  --ion-color-tertiary-rgb: 42, 157, 143;
+  --ion-color-tertiary-contrast: #000000;
+  --ion-color-tertiary-contrast-rgb: 0, 0, 0;
+  --ion-color-tertiary-shade: #258a7e;
+  --ion-color-tertiary-tint: #3fa79a;
+
+  /* Superficies en modo claro: fondo gris-azulado y tarjetas blancas para que destaquen.
+     En modo oscuro, la paleta de Ionic (:root.ios / :root.md) tiene más especificidad y las reemplaza. */
+  --ion-background-color: #f3f6f7;
+  --ion-background-color-rgb: 243, 246, 247;
+  --ion-card-background: #ffffff;
+  --ion-item-background: #ffffff;
+
+  /* Tokens propios */
+  --tf-radio: 16px;
+  --tf-sombra: 0 1px 2px rgba(15, 91, 102, 0.08), 0 4px 16px rgba(15, 91, 102, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ion-color-primary: #4fc3cf;
+    --ion-color-primary-rgb: 79, 195, 207;
+    --ion-color-primary-contrast: #000000;
+    --ion-color-primary-contrast-rgb: 0, 0, 0;
+    --ion-color-primary-shade: #46acb6;
+    --ion-color-primary-tint: #61c9d4;
+
+    --ion-color-secondary: #ff8a70;
+    --ion-color-secondary-rgb: 255, 138, 112;
+    --ion-color-secondary-contrast: #000000;
+    --ion-color-secondary-contrast-rgb: 0, 0, 0;
+    --ion-color-secondary-shade: #e07963;
+    --ion-color-secondary-tint: #ff967e;
+
+    --ion-color-tertiary: #5fd1c2;
+    --ion-color-tertiary-rgb: 95, 209, 194;
+    --ion-color-tertiary-contrast: #000000;
+    --ion-color-tertiary-contrast-rgb: 0, 0, 0;
+    --ion-color-tertiary-shade: #54b8ab;
+    --ion-color-tertiary-tint: #6fd6c8;
+
+    --tf-sombra: none;
+  }
+}

@@ -1,0 +1,102 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Candidatos</ion-title>
+    <ion-buttons slot="end">
+      @if (recargando()) {
+      <ion-spinner name="crescent" class="spinner-barra" aria-label="Actualizando lista" />
+      } @else {
+      <ion-button (click)="cargar()" [disabled]="estado() === 'cargando'" aria-label="Actualizar lista">
+        <ion-icon slot="icon-only" name="refresh-outline" aria-hidden="true" />
+      </ion-button>
+      }
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refrescar($event)" [disabled]="estado() === 'cargando'">
+    <ion-refresher-content pullingText="Desliza para actualizar" refreshingText="Actualizando…" />
+  </ion-refresher>
+
+  @switch (estado()) {
+  <!-- Cargando por primera vez: esqueleto de la lista -->
+  @case ('cargando') {
+  <div class="cargando" aria-busy="true">
+    <p class="resumen-lista">
+      <ion-spinner name="dots" aria-hidden="true" />
+      Consultando Firestore…
+    </p>
+    <ion-list [inset]="true">
+      @for (n of esqueletos; track n) {
+      <ion-item>
+        <ion-skeleton-text slot="start" [animated]="true" class="avatar-esqueleto" />
+        <ion-label>
+          <h2><ion-skeleton-text [animated]="true" style="width: 60%" /></h2>
+          <p><ion-skeleton-text [animated]="true" style="width: 40%" /></p>
+          <p><ion-skeleton-text [animated]="true" style="width: 50%" /></p>
+        </ion-label>
+      </ion-item>
+      }
+    </ion-list>
+  </div>
+  }
+
+  <!-- Error sin datos previos -->
+  @case ('error') {
+  <div class="estado-vacio" role="alert">
+    <ion-icon name="cloud-offline-outline" color="danger" aria-hidden="true" />
+    <h2>No se pudo cargar la lista</h2>
+    <ion-text color="medium">
+      <p>{{ mensajeError() }}</p>
+    </ion-text>
+    <ion-button (click)="cargar()">
+      <ion-icon slot="start" name="refresh-outline" aria-hidden="true" />
+      Reintentar
+    </ion-button>
+  </div>
+  }
+
+  <!-- Datos -->
+  @case ('listo') { @if (total() === 0) {
+  <div class="estado-vacio">
+    <!-- Lupa revisando una carpeta vacía (Rive); el ícono es el respaldo -->
+    <app-rive artboard="Vacio" [conDatos]="false" class="vacio-animacion">
+      <ion-icon name="folder-open-outline" color="medium" aria-hidden="true" />
+    </app-rive>
+    <h2>Aún no hay candidatos</h2>
+    <ion-text color="medium">
+      <p>Los perfiles que registres aparecerán aquí.</p>
+    </ion-text>
+    <ion-button routerLink="/registro">
+      <ion-icon slot="start" name="person-add-outline" aria-hidden="true" />
+      Registrar el primero
+    </ion-button>
+  </div>
+  } @else {
+  <p class="resumen-lista">
+    <strong>{{ total() }}</strong> {{ total() === 1 ? 'candidato registrado' : 'candidatos registrados' }} · más
+    recientes primero
+  </p>
+  <ion-list [inset]="true" class="lista">
+    @for (c of candidatos(); track c.id) {
+    <ion-item button [detail]="true" (click)="verDetalle(c)">
+      <div slot="start" class="avatar" aria-hidden="true">{{ iniciales(c.nombres) }}</div>
+      <ion-label>
+        <h2>{{ c.nombres }}</h2>
+        <p class="cargo">{{ c.cargo }}</p>
+        <div class="etiquetas">
+          <span class="etiqueta">
+            <ion-icon [name]="icono(c.modalidad)" aria-hidden="true" />
+            {{ c.modalidad }}
+          </span>
+          <span class="etiqueta">
+            <ion-icon name="time-outline" aria-hidden="true" />
+            {{ textoExperiencia(c.experienciaAnios) }}
+          </span>
+        </div>
+      </ion-label>
+    </ion-item>
+    }
+  </ion-list>
+  } } }
+</ion-content>

@@ -1,0 +1,82 @@
+.perfil {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 16px 8px;
+  text-align: center;
+
+  h1 {
+    margin: 12px 0 2px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+  font-size: 1.9rem;
+  font-weight: 800;
+  box-shadow: 0 0 0 6px rgba(var(--ion-color-primary-rgb), 0.15);
+}
+
+.perfil-cargo {
+  margin: 0 0 10px;
+  color: var(--ion-color-medium);
+  font-weight: 600;
+}
+
+.perfil-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+ion-list-header ion-label {
+  font-weight: 700;
+}
+
+ion-item ion-icon[slot='start'] {
+  margin-inline-end: 16px;
+  color: var(--ion-color-primary);
+}
+
+ion-label h3 {
+  font-weight: 600;
+}
+
+.secundario {
+  color: var(--ion-color-medium);
+  font-weight: 500;
+}
+
+.habilidades {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 4px;
+
+  ion-chip {
+    margin: 4px 6px 0 0;
+    font-size: 0.85rem;
+  }
+}
+
+.resumen {
+  color: var(--ion-text-color);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.id-documento {
+  margin: 8px 16px calc(24px + var(--ion-safe-area-bottom, 0px));
+  color: var(--ion-color-medium);
+  font-size: 0.72rem;
+  text-align: center;
+}

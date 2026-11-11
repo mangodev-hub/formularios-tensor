@@ -1,9 +1,9 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'formularios-empresarial',
-  webDir: 'www'
+  appId: 'ec.talentflow.registro',
+  appName: 'TalentFlow',
+  webDir: 'www',
 };
 
 export default config;
